@@ -238,6 +238,12 @@ async def send_echo(message: Message):
                 temp = ids[message.from_user.id] + "/" + i
                 photo = FSInputFile(temp)
                 imgs[message.from_user.id].append(photo)
+            else:
+                temp = ids[message.from_user.id] + "/" + i
+                doc = FSInputFile(temp)
+                docs[message.from_user.id].append(doc)
+                print("doc added")
+                print(len(docs[message.from_user.id]))
         if len(imgs[message.from_user.id]) != 0:
             main_keyboard[message.from_user.id]: ReplyKeyboardMarkup = ReplyKeyboardMarkup(
                 keyboard=keyboardq[message.from_user.id], resize_keyboard=True)
