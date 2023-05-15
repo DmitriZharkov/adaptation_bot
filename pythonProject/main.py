@@ -86,7 +86,12 @@ async def process_start_command(message: Message):
 
         if (os.path.isdir(ids[message.from_user.id] + "/" + i)):
             but = KeyboardButton(text=i)
-            keyboardq[message.from_user.id].append(but)
+            if len(keyboardq[message.from_user.id][counter[userid]]) < 2:
+                keyboardq[message.from_user.id][counter[userid]].append(but)
+            else:
+                keyboardq[message.from_user.id].append([])
+                counter[userid] += 1
+                keyboardq[message.from_user.id][counter[userid]].append(but)
 
             main_keyboard[message.from_user.id]: ReplyKeyboardMarkup = ReplyKeyboardMarkup(
                 keyboard=[keyboardq[message.from_user.id]],resize_keyboard=True)
@@ -162,7 +167,7 @@ async def process_start_command1(message: Message):
             else:
                 keyboardq[message.from_user.id].append([])
                 counter[userid] += 1
-
+                keyboardq[message.from_user.id][counter[userid]].append(but)
             main_keyboard[message.from_user.id]: ReplyKeyboardMarkup = ReplyKeyboardMarkup(
                 keyboard=keyboardq[message.from_user.id],resize_keyboard=True)
         elif i == "Ответ.txt":
@@ -201,6 +206,8 @@ async def process_start_command1(message: Message):
             keyboard=keyboardq[message.from_user.id], resize_keyboard=True)
     await message.answer(text_ans[message.from_user.id],
                          reply_markup=main_keyboard[message.from_user.id], parse_mode="HTML", protect_content=True)
+#@dp.message(lambda msg: msg.text == 'Назад')
+#async def send_echod(message: Message):
 
 @dp.message()
 async def send_echo(message: Message):
@@ -227,6 +234,7 @@ async def send_echo(message: Message):
                 else:
                     keyboardq[message.from_user.id].append([])
                     counter[userid]+=1
+                    keyboardq[message.from_user.id][counter[userid]].append(but)
                 main_keyboard[message.from_user.id]: ReplyKeyboardMarkup = ReplyKeyboardMarkup(
                 keyboard=keyboardq[message.from_user.id],resize_keyboard=True)
             elif i=="Ответ.txt":
