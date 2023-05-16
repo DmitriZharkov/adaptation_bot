@@ -71,19 +71,19 @@ def goodbye():
 @dp.message(CommandStart())
 async def process_start_command(message: Message):
     userid = message.from_user.id
-    if not(str(message.from_user.id) in ids):
+    if not (str(message.from_user.id) in ids):
         idsf = open("ids.txt", "a")
-        idsf.write(str(message.from_user.id)+' '+os.getcwd()+"/Menu"+'\n')
+        idsf.write(str(message.from_user.id) + ' ' + os.getcwd() + "/Menu" + '\n')
         idsf.close()
-    ids[message.from_user.id] = os.getcwd()+"/Menu"
-    keyboardq[message.from_user.id]=[]
-    text_ans[message.from_user.id]="Not Defined"
+    ids[message.from_user.id] = os.getcwd() + "/Menu"
+    keyboardq[message.from_user.id] = [[]]
+    text_ans[message.from_user.id] = "Not Defined"
     imgs[message.from_user.id] = []
-    inlkeyboardq[message.from_user.id]=[]
-    docs[message.from_user.id]=[]
+    counter[userid] = 0
+    inlkeyboardq[message.from_user.id] = []
+    docs[message.from_user.id] = []
     for i in list(os.listdir(ids[message.from_user.id])):
         print(ids[message.from_user.id] + "/" + i)
-
         if (os.path.isdir(ids[message.from_user.id] + "/" + i)):
             but = KeyboardButton(text=i)
             if len(keyboardq[message.from_user.id][counter[userid]]) < 2:
@@ -92,47 +92,42 @@ async def process_start_command(message: Message):
                 keyboardq[message.from_user.id].append([])
                 counter[userid] += 1
                 keyboardq[message.from_user.id][counter[userid]].append(but)
-
             main_keyboard[message.from_user.id]: ReplyKeyboardMarkup = ReplyKeyboardMarkup(
-                keyboard=[keyboardq[message.from_user.id]],resize_keyboard=True)
+                keyboard=keyboardq[message.from_user.id], resize_keyboard=True)
         elif i == "Ответ.txt":
-            file[message.from_user.id] = open(ids[message.from_user.id] + "/" + i,encoding="utf-8")
+            file[message.from_user.id] = open(ids[message.from_user.id] + "/" + i, encoding="utf-8")
             text_ans[message.from_user.id] = file[message.from_user.id].read()
         elif img_res.count(i[-4:]) > 0:
             print("!")
             temp = ids[message.from_user.id] + "/" + i
             photo = FSInputFile(temp)
             imgs[message.from_user.id].append(photo)
-        else :
+        else:
             temp = ids[message.from_user.id] + "/" + i
             doc = FSInputFile(temp)
             docs[message.from_user.id].append(doc)
             print("doc added")
             print(len(docs[message.from_user.id]))
 
-
-
     if len(imgs[message.from_user.id]) != 0:
 
         main_keyboard[message.from_user.id]: ReplyKeyboardMarkup = ReplyKeyboardMarkup(
-            keyboard=[keyboardq[message.from_user.id]], resize_keyboard=True)
+            keyboard=keyboardq[message.from_user.id], resize_keyboard=True)
         for j in imgs[message.from_user.id]:
             await message.answer_photo(photo=j, caption="",
                                        reply_markup=main_keyboard[message.from_user.id], protect_content=True)
         imgs.pop(message.from_user.id, None)
-    if len(docs[message.from_user.id])!= 0:
+    if len(docs[message.from_user.id]) != 0:
         print('see docs!')
         for j in docs[message.from_user.id]:
             await message.answer_document(document=j)
 
     but = KeyboardButton(text="В начало")
-    keyboardq[message.from_user.id].append(but)
+    keyboardq[message.from_user.id][counter[userid]].append(but)
     main_keyboard[message.from_user.id]: ReplyKeyboardMarkup = ReplyKeyboardMarkup(
-            keyboard=[keyboardq[message.from_user.id]], resize_keyboard=True)
+        keyboard=keyboardq[message.from_user.id], resize_keyboard=True)
     await message.answer(text_ans[message.from_user.id],
                          reply_markup=main_keyboard[message.from_user.id], parse_mode="HTML", protect_content=True)
-
-
 @dp.message(lambda msg: msg.text[:5] == '/rass')
 async def process_rass_command(message: Message):
     print("see admin!")
@@ -206,9 +201,73 @@ async def process_start_command1(message: Message):
             keyboard=keyboardq[message.from_user.id], resize_keyboard=True)
     await message.answer(text_ans[message.from_user.id],
                          reply_markup=main_keyboard[message.from_user.id], parse_mode="HTML", protect_content=True)
-#@dp.message(lambda msg: msg.text == 'Назад')
-#async def send_echod(message: Message):
+@dp.message(lambda msg: msg.text == 'Назад')
+async def send_echod(message: Message):
+    userid = message.from_user.id
+    if not (str(message.from_user.id) in ids):
+        idsf = open("ids.txt", "a")
+        idsf.write(str(message.from_user.id) + ' ' + os.getcwd() + "/Menu" + '\n')
+        idsf.close()
+    rightest = ids[message.from_user.id].rfind('/')
+    ids[message.from_user.id] = ids[message.from_user.id][:rightest]
+    keyboardq[message.from_user.id] = [[]]
+    text_ans[message.from_user.id] = "Not Defined"
+    imgs[message.from_user.id] = []
+    counter[userid] = 0
+    inlkeyboardq[message.from_user.id] = []
+    docs[message.from_user.id] = []
+    for i in list(os.listdir(ids[message.from_user.id])):
+        print(ids[message.from_user.id] + "/" + i)
+        if (os.path.isdir(ids[message.from_user.id] + "/" + i)):
+            but = KeyboardButton(text=i)
+            if len(keyboardq[message.from_user.id][counter[userid]]) < 2:
+                keyboardq[message.from_user.id][counter[userid]].append(but)
+            else:
+                keyboardq[message.from_user.id].append([])
+                counter[userid] += 1
+                keyboardq[message.from_user.id][counter[userid]].append(but)
+            main_keyboard[message.from_user.id]: ReplyKeyboardMarkup = ReplyKeyboardMarkup(
+                keyboard=keyboardq[message.from_user.id], resize_keyboard=True)
+        elif i == "Ответ.txt":
+            file[message.from_user.id] = open(ids[message.from_user.id] + "/" + i, encoding="utf-8")
+            text_ans[message.from_user.id] = file[message.from_user.id].read()
+        elif img_res.count(i[-4:]) > 0:
+            print("!")
+            temp = ids[message.from_user.id] + "/" + i
+            photo = FSInputFile(temp)
+            imgs[message.from_user.id].append(photo)
+        else:
+            temp = ids[message.from_user.id] + "/" + i
+            doc = FSInputFile(temp)
+            docs[message.from_user.id].append(doc)
+            print("doc added")
+            print(len(docs[message.from_user.id]))
 
+    if len(imgs[message.from_user.id]) != 0:
+
+        main_keyboard[message.from_user.id]: ReplyKeyboardMarkup = ReplyKeyboardMarkup(
+            keyboard=keyboardq[message.from_user.id], resize_keyboard=True)
+        for j in imgs[message.from_user.id]:
+            await message.answer_photo(photo=j, caption="",
+                                       reply_markup=main_keyboard[message.from_user.id], protect_content=True)
+        imgs.pop(message.from_user.id, None)
+    if len(docs[message.from_user.id]) != 0:
+        print('see docs!')
+        for j in docs[message.from_user.id]:
+            await message.answer_document(document=j)
+
+    but = KeyboardButton(text="В начало")
+
+    keyboardq[message.from_user.id].append([])
+
+    keyboardq[message.from_user.id][counter[userid] + 1].append(but)
+    if ids[message.from_user.id][-4:]!="Menu":
+        but1 = KeyboardButton(text="Назад")
+        keyboardq[message.from_user.id][counter[userid] + 1].append(but1)
+    main_keyboard[message.from_user.id]: ReplyKeyboardMarkup = ReplyKeyboardMarkup(
+        keyboard=keyboardq[message.from_user.id], resize_keyboard=True)
+    await message.answer(text_ans[message.from_user.id],
+                         reply_markup=main_keyboard[message.from_user.id], parse_mode="HTML", protect_content=True)
 @dp.message()
 async def send_echo(message: Message):
     docs[message.from_user.id] = []
@@ -265,7 +324,11 @@ async def send_echo(message: Message):
                 await message.answer_document(document=j)
 
         but = KeyboardButton(text="В начало")
-        keyboardq[message.from_user.id][counter[userid]].append(but)
+        but1 = KeyboardButton(text="Назад")
+        keyboardq[message.from_user.id].append([])
+
+        keyboardq[message.from_user.id][counter[userid]+1].append(but)
+        keyboardq[message.from_user.id][counter[userid] + 1].append(but1)
         main_keyboard[message.from_user.id]: ReplyKeyboardMarkup = ReplyKeyboardMarkup(
             keyboard=keyboardq[message.from_user.id], resize_keyboard=True)
         await message.answer(text_ans[message.from_user.id],
