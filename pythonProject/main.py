@@ -56,7 +56,8 @@ adminsl={}
 counter={}
 admins = open("admins.txt",encoding="utf-8")
 for i in admins.readlines():
-    adminsl[i]="admin"
+    preob = i.strip()
+    adminsl[preob]="admin"
 
 # Этот хэндлер будет срабатывать на команду "/start"
 
