@@ -1,6 +1,0 @@
-Bitrix24
-Bitrix – это корпоративная CRM система, для учета рабочего времени, постановки задач, запуска бизнес-процессов.
-
-Обязательно посмотрите видео-обучение по основным процессам в Bitrix:
-
-https://drive.google.com/drive/folders/1es4arD4bgHwEkK48EFhj4MxRWKm7xnWh
